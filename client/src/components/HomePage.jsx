@@ -1,18 +1,19 @@
-import React from 'react';
-import Navbar from './Navbar';
+import React from "react";
+import Navbar from "./Navbar";
+import Hero from "./Hero";
+import Features from "./Features";
+import Loader from "./Loader";
 
 const HomePage = () => {
   return (
     <div>
+      {/* Loader component will be displayed first */}
+      <Loader />
+
+      {/* Navbar and other sections */}
       <Navbar />
-      <div className="text-center mt-16">
-        <h1 className="text-4xl font-bold text-gray-800">
-          Welcome to Our Application
-        </h1>
-        <p className="mt-4 text-xl text-gray-600">
-          Please log in or register to continue.
-        </p>
-      </div>
+      <Hero />
+      <Features />
     </div>
   );
 };

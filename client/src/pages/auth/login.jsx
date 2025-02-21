@@ -1,10 +1,10 @@
-import CommonForm from "@/components/common/form";
-import { useToast } from "@/components/ui/use-toast";
-import { loginFormControls } from "@/config";
-import { loginUser } from "@/store/auth-slice";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { loginFormControls } from "@/config"; // Form controls for login
+import { loginUser } from "@/store/auth-slice"; // Action for login
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import CommonForm from "@/components/common/form"; // Reusable form component
 
 const initialState = {
   email: "",
@@ -16,9 +16,11 @@ function AuthLogin() {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
+  // Handle form submission
   function onSubmit(event) {
     event.preventDefault();
 
+    // Dispatch login action
     dispatch(loginUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast({
@@ -34,28 +36,54 @@ function AuthLogin() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+    <div className="relative mx-auto w-full max-w-md space-y-6 bg-black min-h-screen">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[430px] h-[520px]"></div>
+
+      <form
+        onSubmit={onSubmit}
+        className="relative bg-white/20 backdrop-blur-sm border-2 border-white/20 shadow-lg rounded-lg py-12 px-8"
+      >
+        <h3 className="text-3xl font-semibold text-center text-white">
           Sign in to your account
-        </h1>
-        <p className="mt-2">
-          Don't have an account
+        </h3>
+
+        <div className="mt-8 space-y-6">
+          {/* Loop over form controls and render inputs dynamically */}
+          {loginFormControls.map((control) => (
+            <div key={control.name}>
+              <label htmlFor={control.name} className="block text-white text-sm font-medium">
+                {control.label}
+              </label>
+              <input
+                type={control.type}
+                id={control.name}
+                name={control.name}
+                placeholder={control.placeholder}
+                value={formData[control.name] || ""}
+                onChange={(e) => setFormData({ ...formData, [control.name]: e.target.value })}
+                className="mt-2 w-full px-4 py-3 bg-white/10 border border-transparent rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="submit"
+          className="mt-8 w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
+        >
+          Sign In
+        </button>
+
+        <p className="mt-6 text-sm text-center text-white">
+          Don't have an account?{" "}
           <Link
-            className="font-medium ml-2 text-primary hover:underline"
             to="/auth/register"
+            className="text-blue-500 hover:underline font-medium"
           >
             Register
           </Link>
         </p>
-      </div>
-      <CommonForm
-        formControls={loginFormControls}
-        buttonText={"Sign In"}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-      />
+      </form>
     </div>
   );
 }
