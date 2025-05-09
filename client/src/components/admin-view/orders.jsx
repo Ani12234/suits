@@ -58,10 +58,10 @@ function AdminOrdersView() {
           </TableHeader>
           <TableBody>
             {orderList && orderList.length > 0
-              ? orderList.map((orderItem) => (
-                  <TableRow>
+              ? orderList.map((orderItem, index) => (
+                  <TableRow key={orderItem?._id || index}>
                     <TableCell>{orderItem?._id}</TableCell>
-                    <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
+                    <TableCell>{orderItem?.orderDate ? orderItem.orderDate.split("T")[0] : 'N/A'}</TableCell>
                     <TableCell>
                       <Badge
                         className={`py-1 px-3 ${
@@ -72,10 +72,10 @@ function AdminOrdersView() {
                             : "bg-black"
                         }`}
                       >
-                        {orderItem?.orderStatus}
+                        {orderItem?.orderStatus || 'Unknown'}
                       </Badge>
                     </TableCell>
-                    <TableCell>${orderItem?.totalAmount}</TableCell>
+                    <TableCell>${orderItem?.totalAmount || 0}</TableCell>
                     <TableCell>
                       <Dialog
                         open={openDetailsDialog}
