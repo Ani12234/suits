@@ -1,0 +1,22 @@
+exit
+db.carts.find()
+db.products.find()
+db.orders.find()
+db.find.orders()
+show orders
+show collections
+db.users.find()
+)
+  { $set: { role: "admin" } }
+  { _id: ObjectId("68fa151a7bac1416e92766da") },
+db.users.updateOne(
+db.users.find()
+show orders
+show users
+show collections
+use suitsdb
+use admin
+show collections
+use suitsdb
+show dbs
+show db

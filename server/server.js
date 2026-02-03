@@ -37,7 +37,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(
   cors({
-    origin: "https://suits-three.vercel.app",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
@@ -69,3 +69,4 @@ app.use("/api/shop/review", shopReviewRouter);
 app.use("/api/common/feature", commonFeatureRouter);
 
 app.listen(PORT, () => console.log(`Server is now running on port ${PORT}`));
+// https://suits-three.vercel.app

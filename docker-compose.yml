@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      # Uncomment if your client needs to know the API base URL at build/runtime
+      # - VITE_API_URL=http://localhost:5000
+    volumes:
+      - ./client:/app
+      - client_node_modules:/app/node_modules
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://admin%40admin.com:password123@mongodb:27017/suitsdb?authSource=admin
+      # If you don't want to expose your .env file, you can set MONGO_URI directly here instead
+      # - MONGO_URI=mongodb://mongo:27017/yourdb
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+      - server_node_modules:/app/node_modules
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin@admin.com
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: suitsdb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - "e:/suits/mongo-data:/data/db"
+
+volumes:
+  client_node_modules:
+  server_node_modules:
